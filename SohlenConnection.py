@@ -1,15 +1,15 @@
 import serial
 
-class SohlenConnection:
-
-    ser = serial.Serial(port='COM4',baudrate=11520,timeout=10)
-    print(ser.isOpen())
+def getData(side):
+    if side == "L":
+        port = "COM3"
+    if side == "R":
+        port = "COM4"
+    else:
+        print("Bitte L oder R")
+        return 1
+    ser = serial.Serial(port=port,baudrate=115200,timeout=10)
     values = bytearray([2])
-    print(ser.in_waiting)
-    print(ser.out_waiting)
-    ser.write(values)
-    print(ser.in_waiting)
-    print(ser.out_waiting)
-    res = ser.read(10)
-    print(res)
-    ser.close()
+    ser.write(b'\x02')
+    res = ser.read(518)
+    return res
