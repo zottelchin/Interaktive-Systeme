@@ -1,27 +1,22 @@
 import array
+import sys
 
 
 def inputRawData(data):
     Matrix = [[0 for x in range(10)]for y in range(5)]
-    #data = data.replace("\x", "")
-    Anzahl = convertHexToInt(data[8:12])
-    print(Anzahl)
+    anzahl = convertHexToInt(data[4:6])
     tempArr = array.array('i')
-    for i in range(0, Anzahl):
-        temp = umrechnung(convertHexToInt(data[12+i*4:16+i*4]))
-        print(temp)
+    for i in range(0, anzahl):
+        temp = umrechnung(convertHexToInt(data[6+i*2:8+i*2]))
         if temp > 15:
-            print(temp)
             tempArr.append(temp)
-    print(tempArr)
     for x in 0,1,2,3,4:
         for y in 0,1,2,3,4,5,6,7,8,9:
             Matrix[x][y] = tempArr[x*10+y]
-    print(Matrix)
     return Matrix
 
 def convertHexToInt(hexarray):
-    return int(hexarray, 16)
+    return int.from_bytes(hexarray, byteorder='big')
 
 def umrechnung(a):
     M_RANGE0_OFFSET = 0
