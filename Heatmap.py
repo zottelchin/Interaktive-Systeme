@@ -4,11 +4,11 @@ rect_Height = 50
 rect_Width = 50
 
 turtle.tracer(0, 0)
-turtle.setup(rect_Width*5,rect_Height*10 )
+turtle.setup(rect_Width*5,rect_Height*10)
 
 screen = turtle.Screen()
 screen.colormode(255)
-screen.setworldcoordinates(0,0,5*rect_Width,-10*rect_Height)
+screen.setworldcoordinates(0,-10*rect_Height,5*rect_Width,0)
 
 buddha = turtle.Turtle()
 buddha.speed("fastest")
@@ -17,8 +17,8 @@ buddha.hideturtle()
 
 
 def drawHeatmap(matrix):
-    for i in range(10):
-        for j in range(5):
+    for i in range(5):
+        for j in range(10):
             buddha.fillcolor(intToColor(matrix[j][i]))
             drawSqare(i*rect_Width,j*-rect_Height)
     screen.update()
@@ -49,5 +49,5 @@ def intToColor(i):
         i -= 768
         return (255,255-i,0)
     else:
-        return (255,255,255)
+        return (255,000,42)
     print("Changed color")
