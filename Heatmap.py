@@ -1,15 +1,21 @@
 import turtle
 
-turtle.tracer(0, 0)
+rect_Height = 50
+rect_Width = 50
 
-buddha = turtle.Turtle()
-buddha.speed("fastest")
+turtle.tracer(0, 0)
+turtle.setup(rect_Width*5,rect_Height*10)
 
 screen = turtle.Screen()
 screen.colormode(255)
+#turtle.screensize(rect_Width*7,rect_Height*12)
+screen.setworldcoordinates(0,0,5*rect_Width,-10*rect_Height)
 
-rect_Height = 50
-rect_Width = 50
+buddha = turtle.Turtle()
+buddha.speed("fastest")
+buddha.hideturtle()
+
+
 
 def drawHeatmap(matrix):
     for i in range(5):
