@@ -1,14 +1,14 @@
 import array
 
 
-def inputRawData(input):
+def inputRawData(data):
     Matrix = [[0 for x in range(10)]for y in range(5)]
-    input = input.replace(" ", "")
-    Anzahl = convertHex(input[8:12])
+    #data = data.replace("\x", "")
+    Anzahl = convertHexToInt(data[8:12])
     print(Anzahl)
     tempArr = array.array('i')
     for i in range(0, Anzahl):
-        temp = doStuff(convertHex(input[12+i*4:16+i*4]))
+        temp = umrechnung(convertHexToInt(data[12+i*4:16+i*4]))
         print(temp)
         if temp > 15:
             print(temp)
@@ -20,10 +20,10 @@ def inputRawData(input):
     print(Matrix)
     return Matrix
 
-def convertHex(input):
-    return int(input, 16)
+def convertHexToInt(hexarray):
+    return int(hexarray, 16)
 
-def doStuff(a):
+def umrechnung(a):
     M_RANGE0_OFFSET = 0
     M_RANGE1_OFFSET = 1843
     M_RANGE2_OFFSET = 3502
