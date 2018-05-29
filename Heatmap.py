@@ -17,8 +17,8 @@ buddha.hideturtle()
 
 
 def drawHeatmap(matrix):
-    for i in range(5):
-        for j in range(10):
+    for i in range(10):
+        for j in range(5):
             buddha.fillcolor(intToColor(matrix[j][i]))
             drawSqare(i*rect_Width,j*-rect_Height)
     screen.update()
