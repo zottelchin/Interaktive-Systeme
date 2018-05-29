@@ -2,10 +2,10 @@ import serial
 
 def getData(side):
     if side == "L":
-        port = "COM4"
+        port = "COM3"
     else: 
         if side == "R":
-            port = "COM3"
+            port = "COM4"
         else:
             print("Bitte L oder R")
             return 1

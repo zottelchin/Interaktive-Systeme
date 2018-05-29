@@ -2,8 +2,8 @@ import Heatmap
 import SohlenConnection
 import Interpreter
 
-#Heatmap.drawTest()
-sole_data = SohlenConnection.getData("L")
-data = Interpreter.inputRawData(sole_data)
-
-print(data)
+run = True
+while run:
+    sole_data = SohlenConnection.getData("L")
+    data = Interpreter.inputRawData(sole_data)
+    Heatmap.drawHeatmap(data)
