@@ -4,7 +4,7 @@ rect_Height = 50
 rect_Width = 50
 
 turtle.tracer(0, 0)
-turtle.setup(rect_Width*5,rect_Height*10)
+turtle.setup(rect_Width*5,rect_Height*10 )
 
 screen = turtle.Screen()
 screen.colormode(255)
