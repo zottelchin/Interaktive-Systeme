@@ -10,8 +10,8 @@ def inputRawData(data):
         temp = umrechnung(convertHexToInt(data[6+i*2:8+i*2]))
         if temp > 15:
             tempArr.append(temp)
-    for x in 0,1,2,3,4:
-        for y in 0,1,2,3,4,5,6,7,8,9:
+    for x in range(5):
+        for y in range(10):
             Matrix[x][y] = tempArr[x*10+y]
     return Matrix
 
