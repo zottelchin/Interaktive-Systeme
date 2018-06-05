@@ -5,9 +5,10 @@ offsetRight = [[0 for x in range(5)]for y in range(10)]
 offsetLeft = [[0 for x in range(5)]for y in range(10)]
 rechtsVorneSchwelle = 90000000
 rechtsHintenSchwelle = 90000000
-
+indexofWidget=1
 
 def createUI() :
+    global indexofWidget
     top = Tk()
     top_menu = Menu(top)      
     top.config(menu = top_menu)
@@ -17,7 +18,7 @@ def createUI() :
     OptionsMenu.add_command(label = "Rechts Vorne Schwellenwert", command=setVorneRSchwelle)
     OptionsMenu.add_command(label = "Rechts Hinten Schwellenwert", command=setHintenRSchwelle)
 
-    indexofWidget = 2 # das hier veraendern, um ueber Widgets zu iterieren
+    #indexofWidget = 1 # das hier veraendern, um ueber Widgets zu iterieren
 
     testButton1 = Button(top, text = "Hello", activebackground = "green")
     testButton1.pack()
@@ -41,11 +42,11 @@ def createUI() :
     R3 = Radiobutton(top, text="Option 3", variable=var, value=3, activebackground = "green")
     R3.pack( anchor = W)
 
-    allWidgets = top.winfo_children()
-    print(allWidgets[indexofWidget % len(allWidgets)])
-    print(allWidgets)
-    allWidgets[indexofWidget % len(allWidgets)].config(bg = "yellow")
-    allWidgets[indexofWidget % len(allWidgets)].config(state = ACTIVE)   
+    #allWidgets = top.winfo_children()
+    #print(allWidgets[indexofWidget % len(allWidgets)])
+    #print(allWidgets)
+    #allWidgets[indexofWidget % len(allWidgets)].config(bg = "yellow")
+    #allWidgets[indexofWidget % len(allWidgets)].config(state = "active")   
     
     # man kann mit indexofWidget ueber alle Widgets interieren. Allgemein muss man dann den State des letzten auf NORMAL
     # und den state des aktuellen auf ACTIVE setzen, damit der aktuelle mit der eingestellten Farbe hervorgehoben wird.
@@ -53,10 +54,17 @@ def createUI() :
     # anders verhaelt als die anderen Widgets (isinstance(allWidgets[indexofWidget % len(allWidgets)], Tkinter.Listbox)
 
 
-    top.after(1000,read())
+    top.after(200,read())
     top.mainloop()
 
-
+#def test():
+#    global indexofWidget
+    
+#    allWidgets = top.winfo_children()
+#    print(allWidgets[indexofWidget % len(allWidgets)])
+#    print(allWidgets)
+#    allWidgets[indexofWidget % len(allWidgets)].config(bg = "yellow")
+#    allWidgets[indexofWidget % len(allWidgets)].config(state = "active") 
 
 def setOffset():
     global offsetRight 
@@ -73,7 +81,7 @@ def setOffset():
     raw_right_data = SohlenConnection.getData("R")
     right_data = Interpreter.inputRawDataRight(raw_right_data, offsetRight)
     offsetRight = right_data
-    print("hallo")
+    
 
 
 def setVorneRSchwelle():
@@ -99,9 +107,11 @@ def setHintenRSchwelle():
 
     global rechtsHintenSchwelle
     rechtsHintenSchwelle = rechtsHinten
+    print(rechtsHintenSchwelle)
 
 
 def read():
+    global indexofWidget
     run = True
     while run:
         #raw_left_data = SohlenConnection.getData("L")
@@ -109,16 +119,20 @@ def read():
 
         raw_right_data = SohlenConnection.getData("R")
         right_data = Interpreter.inputRawDataRight(raw_right_data, offsetRight)
-        #print(offsetRight)
+        print(indexofWidget)
         
 
-    if VorneRechts(right_data) and not HintenRechts(right_data):
-        print("vorne")
+        if VorneRechts(right_data) and not HintenRechts(right_data):
+            print("vorne")
+            indexofWidget=indexofWidget+1
+            #test()
 
-    if HintenRechts(right_data) and not VorneRechts(right_data):
-        print("hinten")
+        if HintenRechts(right_data) and not VorneRechts(right_data):
+            print("hinten")
+            indexofWidget=indexofWidget-1
+            #test()
 
-    Heatmap.drawHeatmap(right_data)
+        Heatmap.drawHeatmap(right_data)
     
 
 def VorneRechts(Data):
@@ -127,16 +141,16 @@ def VorneRechts(Data):
         for j in range(5):
             rechtsVorne += Data[i][j]
 
-    if rechtsVorne >= rechtsVorneSchwelle-10000:
+    if rechtsVorne >= rechtsVorneSchwelle-20000:
         return True
     return False
 
 def HintenRechts(Data):
     rechtsHinten = 0
-    for i in range(3):
+    for i in 7,8,9:
         for j in range(5):
             rechtsHinten += Data[i][j]
 
-    if rechtsHinten >= rechtsHintenSchwelle-10000:
+    if rechtsHinten >= rechtsHintenSchwelle-20000:
         return True
     return False
