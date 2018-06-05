@@ -2,27 +2,30 @@ import Heatmap
 import SohlenConnection
 import Interpreter
 import gui
+from multiprocessing import Process
+import threading
 
-offsetRight = [[0 for x in range(5)]for y in range(10)]
-offsetLeft = [[0 for x in range(5)]for y in range(10)]
 
-def setOffset():
-    raw_left_data = SohlenConnection.getData("L")
-    left_data = Interpreter.inputRawDataLeft(raw_left_data)
-    offsetLeft = left_data
+gui.createUI()
 
-    raw_right_data = SohlenConnection.getData("R")
-    right_data = Interpreter.inputRawDataRight(raw_right_data)
-    offsetRight = right_data
+#def read():
+#    run = True
+#    while run:
+        #raw_left_data = SohlenConnection.getData("L")
+        #left_data = Interpreter.inputRawDataLeft(raw_left_data, gui.offsetLeft)
 
-run = True
-while run:
-    raw_left_data = SohlenConnection.getData("L")
-    left_data = Interpreter.inputRawDataLeft(raw_left_data, offsetLeft)
+#        raw_right_data = SohlenConnection.getData("R")
+#        right_data = Interpreter.inputRawDataRight(raw_right_data, gui.offsetRight)
+        #print(gui.offsetRight)
 
-    raw_right_data = SohlenConnection.getData("R")
-    right_data = Interpreter.inputRawDataRight(raw_right_data, offsetRight)
+#        Heatmap.drawHeatmap(right_data)
+    
 
-    Heatmap.drawHeatmap(right_data)
 
-    gui.createUI()
+#if __name__ == '__main__':
+#    p1 = Process(target=gui.createUI())
+#    p1.start()
+#    p2 = Process(target=read())
+#    p2.start()
+#    p1.join()
+#    p2.join()

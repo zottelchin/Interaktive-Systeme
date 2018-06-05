@@ -1,10 +1,12 @@
 from tkinter import *
-import Main
+import SohlenConnection, Interpreter,Heatmap
+
+offsetRight = [[0 for x in range(5)]for y in range(10)]
+offsetLeft = [[0 for x in range(5)]for y in range(10)]
+
 
 def createUI() :
     top = Tk()
-
-    
     top_menu = Menu(top)      
     top.config(menu = top_menu)
     OptionsMenu = Menu(top_menu)
@@ -33,5 +35,37 @@ def createUI() :
     R3 = Radiobutton(top, text="Option 3", variable=var, value=3)
     R3.pack( anchor = W)
 
-
+    top.after(1000,read())
     top.mainloop()
+
+
+
+def setOffset():
+    global offsetRight 
+    global offsetLeft
+    
+    offsetRight = [[0 for x in range(5)]for y in range(10)]
+    offsetLeft = [[0 for x in range(5)]for y in range(10)]
+
+
+    #raw_left_data = SohlenConnection.getData("L")
+    #left_data = Interpreter.inputRawDataLeft(raw_left_data, offsetLeft)
+    #offsetLeft = left_data
+
+    raw_right_data = SohlenConnection.getData("R")
+    right_data = Interpreter.inputRawDataRight(raw_right_data, offsetRight)
+    offsetRight = right_data
+    print("hallo")
+
+def read():
+    run = True
+    while run:
+        #raw_left_data = SohlenConnection.getData("L")
+        #left_data = Interpreter.inputRawDataLeft(raw_left_data, offsetLeft)
+
+        raw_right_data = SohlenConnection.getData("R")
+        right_data = Interpreter.inputRawDataRight(raw_right_data, offsetRight)
+        #print(offsetRight)
+
+        Heatmap.drawHeatmap(right_data)
+    
