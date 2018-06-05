@@ -1,5 +1,6 @@
 from tkinter import *
 import SohlenConnection, Interpreter,Heatmap
+import Heatmap as Heatmap2
 
 offsetRight = [[0 for x in range(5)]for y in range(10)]
 offsetLeft = [[0 for x in range(5)]for y in range(10)]
@@ -73,9 +74,9 @@ def setOffset():
     offsetLeft = [[0 for x in range(5)]for y in range(10)]
 
 
-    #raw_left_data = SohlenConnection.getData("L")
-    #left_data = Interpreter.inputRawDataLeft(raw_left_data, offsetLeft)
-    #offsetLeft = left_data
+    raw_left_data = SohlenConnection.getData("L")
+    left_data = Interpreter.inputRawDataLeft(raw_left_data, offsetLeft)
+    offsetLeft = left_data
 
     raw_right_data = SohlenConnection.getData("R")
     right_data = Interpreter.inputRawDataRight(raw_right_data, offsetRight)
@@ -146,21 +147,34 @@ def setSeiteLSchwelle():
 def read():
     run = True
     while run:
-        #raw_left_data = SohlenConnection.getData("L")
-        #left_data = Interpreter.inputRawDataLeft(raw_left_data, offsetLeft)
+        raw_left_data = SohlenConnection.getData("L")
+        left_data = Interpreter.inputRawDataLeft(raw_left_data, offsetLeft)
 
         raw_right_data = SohlenConnection.getData("R")
         right_data = Interpreter.inputRawDataRight(raw_right_data, offsetRight)
         #print(offsetRight)
         
 
-    if VorneRechts(right_data) and not HintenRechts(right_data):
-        print("vorne")
+    if VorneRechts(right_data) and not HintenRechts(right_data) and not SeiteRechts(right_data):
+        print("vorne rechts")
 
-    if HintenRechts(right_data) and not VorneRechts(right_data):
-        print("hinten")
+    if HintenRechts(right_data) and not VorneRechts(right_data) and not SeiteRechts(right_data):
+        print("hinten rechts")
+
+    if not HintenRechts(right_data) and not VorneRechts(right_data) and SeiteRechts(right_data):
+        print("seite rechts")
+
+    if VorneLinks(left_data) and not HintenLinks(left_data) and not SeiteLinks(left_data):
+        print("vorne links")
+
+    if HintenLinks(left_data) and not VorneLinks(left_data) and not SeiteLinks(left_data):
+        print("hinten left")
+
+    if not HintenLinks(left_data) and not VorneLinks(left_data) and SeiteLinks(left_data):
+        print("seite links")
 
     Heatmap.drawHeatmap(right_data)
+    Heatmap2.drawHeatmap(left_data)
     
 
 def VorneRechts(Data):
