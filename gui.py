@@ -1,7 +1,15 @@
 from tkinter import *
+import Main
 
 def createUI() :
     top = Tk()
+
+    
+    top_menu = Menu(top)      
+    top.config(menu = top_menu)
+    OptionsMenu = Menu(top_menu)
+    top_menu.add_cascade(label = "Options", menu=OptionsMenu)
+    OptionsMenu.add_command(label = "Normalize", command=setOffset)
 
     testButton1 = Button(top, text = "Hello", activebackground = "green")
     testButton1.pack()

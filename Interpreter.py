@@ -10,7 +10,6 @@ def inputRawDataLeft(data):
         temp = umrechnung(convertHexToInt(data[6+i*2:8+i*2]))
         tempArr.append(temp)
 
-    print(len(tempArr))
     for i in range(5):
         for j in range(10):
             Matrix[j][i] = tempArr[180+(i*-16)+j]
@@ -25,7 +24,6 @@ def inputRawDataRight(data):
         temp = umrechnung(convertHexToInt(data[6 + i * 2:8 + i * 2]))
         tempArr.append(temp)
 
-    print(len(tempArr))
     for i in range(5):
         for j in range(10):
             Matrix[j][i] = tempArr[41+i+(16*j)]

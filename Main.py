@@ -1,6 +1,7 @@
 import Heatmap
 import SohlenConnection
 import Interpreter
+import gui
 
 run = True
 while run:
@@ -11,3 +12,5 @@ while run:
     right_data = Interpreter.inputRawDataRight(raw_right_data)
 
     Heatmap.drawHeatmap(right_data)
+
+    gui.createUI()
