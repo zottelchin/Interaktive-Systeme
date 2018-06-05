@@ -1,8 +1,14 @@
 import array
 import sys
 
+def normalize(Matrix, offset):
+    for i in range(5):
+        for j in range(10):
+            Matrix[j][i] = Matrix[j][i] - offset[j][i]
 
-def inputRawDataLeft(data):
+    return Matrix
+
+def inputRawDataLeft(data, offset):
     Matrix = [[0 for x in range(5)]for y in range(10)]
     anzahl = convertHexToInt(data[4:6])
     tempArr = array.array('i')
@@ -14,9 +20,10 @@ def inputRawDataLeft(data):
         for j in range(10):
             Matrix[j][i] = tempArr[180+(i*-16)+j]
 
+    normalize(Matrix, offset)
     return Matrix
 
-def inputRawDataRight(data):
+def inputRawDataRight(data, offset):
     Matrix = [[0 for x in range(5)] for y in range(10)]
     anzahl = convertHexToInt(data[4:6])
     tempArr = array.array('i')
@@ -28,6 +35,7 @@ def inputRawDataRight(data):
         for j in range(10):
             Matrix[j][i] = tempArr[41+i+(16*j)]
 
+    normalize(Matrix, offset)
     return Matrix
 
 def convertHexToInt(hexarray):
