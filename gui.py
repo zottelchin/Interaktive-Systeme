@@ -3,9 +3,12 @@ import SohlenConnection, Interpreter,Heatmap
 
 offsetRight = [[0 for x in range(5)]for y in range(10)]
 offsetLeft = [[0 for x in range(5)]for y in range(10)]
-rechtsVorneSchwelle = 90000000
-rechtsHintenSchwelle = 90000000
-
+rechtsVorneSchwelle = 9000000
+rechtsHintenSchwelle = 9000000
+rechtsSeiteSchwelle = 9000000
+linnksVorneSchwelle = 9000000
+linksHintenSchwelle = 9000000
+linksSeiteSchwelle = 9000000
 
 def createUI() :
     top = Tk()
@@ -16,6 +19,10 @@ def createUI() :
     OptionsMenu.add_command(label = "Normalize", command=setOffset)
     OptionsMenu.add_command(label = "Rechts Vorne Schwellenwert", command=setVorneRSchwelle)
     OptionsMenu.add_command(label = "Rechts Hinten Schwellenwert", command=setHintenRSchwelle)
+    OptionsMenu.add_command(label = "Rechts Seite Schwellenwert", command=setSeiteRSchwelle)
+    OptionsMenu.add_command(label = "Links Vorne Schwellenwert", command=setVorneLSchwelle)
+    OptionsMenu.add_command(label = "Links Hinten Schwellenwert", command=setHintenLSchwelle)
+    OptionsMenu.add_command(label = "Links Seite Schwellenwert", command=setSeiteLSchwelle)
 
     indexofWidget = 2 # das hier veraendern, um ueber Widgets zu iterieren
 
@@ -79,27 +86,62 @@ def setOffset():
 def setVorneRSchwelle():
     raw_right_data = SohlenConnection.getData("R")
     right_data = Interpreter.inputRawDataRight(raw_right_data, offsetRight)
-    #print(offsetRight)
     rechtsVorne = 0
     for i in range(3):
         for j in range(5):
             rechtsVorne += right_data[i][j]
-    
     global rechtsVorneSchwelle
     rechtsVorneSchwelle = rechtsVorne
 
 def setHintenRSchwelle():
     raw_right_data = SohlenConnection.getData("R")
     right_data = Interpreter.inputRawDataRight(raw_right_data, offsetRight)
-    #print(offsetRight)
     rechtsHinten = 0
     for i in 7,8,9:
         for j in range(5):
             rechtsHinten += right_data[i][j]
-
     global rechtsHintenSchwelle
     rechtsHintenSchwelle = rechtsHinten
 
+def setSeiteRSchwelle():
+    raw_right_data = SohlenConnection.getData("R")
+    right_data = Interpreter.inputRawDataRight(raw_right_data, offsetRight)
+    rechtsSeite = 0
+    for i in 4,5,6,7:
+        for j in 3,4:
+            rechtsSeite += right_data[i][j]
+    global rechtsSeiteSchwelle
+    rechtsSeiteSchwelle = rechtsSeite
+
+def setVorneLSchwelle():
+    raw_left_data = SohlenConnection.getData("L")
+    links_data = Interpreter.inputRawDataRight(raw_left_data, offsetRight)
+    linksVorne = 0
+    for i in range(3):
+        for j in range(5):
+            linksVorne += links_data[i][j]
+    global linksVorneSchwelle
+    linksVorneSchwelle = linksVorne
+
+def setHintenLSchwelle():
+    raw_left_data = SohlenConnection.getData("L")
+    left_data = Interpreter.inputRawDataLeft(raw_left_data, offsetLeft)
+    linksHinten = 0
+    for i in 7,8,9:
+        for j in range(5):
+            linksHinten += left_data[i][j]
+    global linksHintenSchwelle
+    linksHintenSchwelle = linksHinten
+
+def setSeiteLSchwelle():
+    raw_left_data = SohlenConnection.getData("L")
+    left_data = Interpreter.inputRawDataLeft(raw_left_data, offsetLeft)
+    linksSeite = 0
+    for i in 4,5,6,7:
+        for j in 0,1:
+            linksSeite += left_data[i][j]
+    global linksSeiteSchwelle
+    linksSeiteSchwelle = linksSeite
 
 def read():
     run = True
@@ -127,7 +169,7 @@ def VorneRechts(Data):
         for j in range(5):
             rechtsVorne += Data[i][j]
 
-    if rechtsVorne >= rechtsVorneSchwelle-10000:
+    if rechtsVorne >= rechtsVorneSchwelle-20000:
         return True
     return False
 
@@ -137,6 +179,46 @@ def HintenRechts(Data):
         for j in range(5):
             rechtsHinten += Data[i][j]
 
-    if rechtsHinten >= rechtsHintenSchwelle-10000:
+    if rechtsHinten >= rechtsHintenSchwelle-20000:
+        return True
+    return False
+
+def SeiteRechts(Data):
+    rechtsSeite = 0
+    for i in 4,5,6,7:
+        for j in 3,4:
+            rechtsSeite += Data[i][j]
+
+    if rechtsSeite >= rechtsSeiteSchwelle-20000:
+        return True
+    return False
+
+def VorneLinks(Data):
+    linksVorne = 0
+    for i in range(3):
+        for j in range(5):
+            linksVorne += Data[i][j]
+
+    if linksVorne >= linksVorneSchwelle-20000:
+        return True
+    return False
+
+def HintenLinks(Data):
+    linksHinten = 0
+    for i in range(3):
+        for j in range(5):
+            linksHinten += Data[i][j]
+
+    if linksHinten >= linksHintenSchwelle-20000:
+        return True
+    return False
+
+def SeiteLinks(Data):
+    linksSeite = 0
+    for i in 4,5,6,7:
+        for j in 0,1:
+            linksSeite += Data[i][j]
+
+    if linksSeite >= linksSeiteSchwelle-20000:
         return True
     return False
