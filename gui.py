@@ -3,6 +3,8 @@ import SohlenConnection, Interpreter,Heatmap
 
 offsetRight = [[0 for x in range(5)]for y in range(10)]
 offsetLeft = [[0 for x in range(5)]for y in range(10)]
+rechtsVorneSchwelle = 90000000
+rechtsHintenSchwelle = 90000000
 
 
 def createUI() :
@@ -12,6 +14,8 @@ def createUI() :
     OptionsMenu = Menu(top_menu)
     top_menu.add_cascade(label = "Options", menu=OptionsMenu)
     OptionsMenu.add_command(label = "Normalize", command=setOffset)
+    OptionsMenu.add_command(label = "Rechts Vorne Schwellenwert", command=setVorneRSchwelle)
+    OptionsMenu.add_command(label = "Rechts Hinten Schwellenwert", command=setHintenRSchwelle)
 
     indexofWidget = 2 # das hier veraendern, um ueber Widgets zu iterieren
 
@@ -71,6 +75,32 @@ def setOffset():
     offsetRight = right_data
     print("hallo")
 
+
+def setVorneRSchwelle():
+    raw_right_data = SohlenConnection.getData("R")
+    right_data = Interpreter.inputRawDataRight(raw_right_data, offsetRight)
+    #print(offsetRight)
+    rechtsVorne = 0
+    for i in range(3):
+        for j in range(5):
+            rechtsVorne += right_data[i][j]
+    
+    global rechtsVorneSchwelle
+    rechtsVorneSchwelle = rechtsVorne
+
+def setHintenRSchwelle():
+    raw_right_data = SohlenConnection.getData("R")
+    right_data = Interpreter.inputRawDataRight(raw_right_data, offsetRight)
+    #print(offsetRight)
+    rechtsHinten = 0
+    for i in 7,8,9:
+        for j in range(5):
+            rechtsHinten += right_data[i][j]
+
+    global rechtsHintenSchwelle
+    rechtsHintenSchwelle = rechtsHinten
+
+
 def read():
     run = True
     while run:
@@ -80,6 +110,33 @@ def read():
         raw_right_data = SohlenConnection.getData("R")
         right_data = Interpreter.inputRawDataRight(raw_right_data, offsetRight)
         #print(offsetRight)
+        
 
-        Heatmap.drawHeatmap(right_data)
+    if VorneRechts(right_data) and not HintenRechts(right_data):
+        print("vorne")
+
+    if HintenRechts(right_data) and not VorneRechts(right_data):
+        print("hinten")
+
+    Heatmap.drawHeatmap(right_data)
     
+
+def VorneRechts(Data):
+    rechtsVorne = 0
+    for i in range(3):
+        for j in range(5):
+            rechtsVorne += Data[i][j]
+
+    if rechtsVorne >= rechtsVorneSchwelle-10000:
+        return True
+    return False
+
+def HintenRechts(Data):
+    rechtsHinten = 0
+    for i in range(3):
+        for j in range(5):
+            rechtsHinten += Data[i][j]
+
+    if rechtsHinten >= rechtsHintenSchwelle-10000:
+        return True
+    return False
