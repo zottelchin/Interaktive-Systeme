@@ -2,6 +2,8 @@ from tkinter import *
 import SohlenConnection
 import Interpreter
 import Heatmap
+import pyautogui
+import time
 
 offsetRight = [[0 for x in range(5)]for y in range(10)]
 offsetLeft = [[0 for x in range(5)]for y in range(10)]
@@ -12,11 +14,13 @@ linksVorneSchwelle = 9000000
 linksHintenSchwelle = 9000000
 linksSeiteSchwelle = 9000000
 indexofWidget = 1
+auswahl=False
 
 
 def createUI():
     global indexofWidget
     top = Tk()
+    top.geometry('300x500')
     top_menu = Menu(top)
     top.config(menu=top_menu)
     OptionsMenu = Menu(top_menu)
@@ -37,32 +41,32 @@ def createUI():
 
     # indexofWidget = 1 # das hier veraendern, um ueber Widgets zu iterieren
 
-    testButton1 = Button(top, text="Hello", activebackground="green")
-    testButton1.pack()
+    testButton1 = Button(top, text="Hello", activebackground="green",highlightcolor="green",command=clickbutton1)
+    testButton1.pack(padx=10,pady=10)
 
     testListbox1 = Listbox(top, highlightcolor="green")
     testListbox1.insert(1, "Hello")
     testListbox1.insert(2, "Bye")
-    testListbox1.pack()
+    testListbox1.pack(padx=10,pady=10)
 
     testCheckBox1 = Checkbutton(
         top, text="Arr! This be a Checkbox", activebackground="green")
     testCheckBox2 = Checkbutton(
         top, text="Shiver me timbers!", activebackground="green")
-    testCheckBox1.pack()
-    testCheckBox2.pack()
+    testCheckBox1.pack(padx=10,pady=10)
+    testCheckBox2.pack(padx=10,pady=10)
 
     var = IntVar()
 
     R1 = Radiobutton(top, text="Option 1", variable=var,
                      value=1, activebackground="green")
-    R1.pack(anchor=W)
+    R1.pack(anchor=W,padx=10,pady=10)
     R2 = Radiobutton(top, text="Option 2", variable=var,
                      value=2, activebackground="green")
-    R2.pack(anchor=W)
+    R2.pack(anchor=W,padx=10,pady=10)
     R3 = Radiobutton(top, text="Option 3", variable=var,
                      value=3, activebackground="green")
-    R3.pack(anchor=W)
+    R3.pack(anchor=W,padx=10,pady=10)
 
     #allWidgets = top.winfo_children()
     #print(allWidgets[indexofWidget % len(allWidgets)])
@@ -77,22 +81,30 @@ def createUI():
     run=True
     while run:
         top.after(50, read())
-        top.after(50, test(top))
+        top.after(50, iterate_gui(top))
     top.mainloop()
 
 
-def test(top):
+def iterate_gui(top):
     global indexofWidget
-    print("test")
+    global auswahl
+    #print("test")
     allWidgets = top.winfo_children()
-    print(allWidgets[indexofWidget % len(allWidgets)])
-    print(allWidgets)
+    #print(allWidgets[indexofWidget % len(allWidgets)])
+    #print(allWidgets)
     if (indexofWidget % len(allWidgets)) != 0:
         for i in range(len(allWidgets)-1):
             allWidgets[i+1].config(bg=top.cget("bg"))
-            allWidgets[i+1].config(state="disable")
+            
         allWidgets[indexofWidget % len(allWidgets)].config(bg="yellow")
         allWidgets[indexofWidget % len(allWidgets)].config(state="normal")
+    if auswahl==True:
+        allWidgets[indexofWidget % len(allWidgets)].config(bg="red")
+        x=allWidgets[indexofWidget % len(allWidgets)].winfo_rootx()
+        y=allWidgets[indexofWidget % len(allWidgets)].winfo_rooty()
+        pyautogui.mouseDown(x+10,y+10)
+        time.sleep(0.5)
+        pyautogui.mouseUp(x+10,y+10)
 
 
 def setOffset():
@@ -179,6 +191,7 @@ def setSeiteLSchwelle():
 
 def read():
     global indexofWidget
+    global auswahl
     #run = True
     # while run:
     raw_left_data = SohlenConnection.getData("L")
@@ -204,6 +217,9 @@ def read():
 
     if VorneLinks(left_data) and not HintenLinks(left_data) and not SeiteLinks(left_data):
         print("vorne links")
+        auswahl=True
+    else:
+        auswahl=False
 
     if HintenLinks(left_data) and not VorneLinks(left_data) and not SeiteLinks(left_data):
         print("hinten left")
@@ -276,3 +292,6 @@ def SeiteLinks(Data):
     if linksSeite >= linksSeiteSchwelle - 20000:
         return True
     return False
+
+def clickbutton1():
+    print("hello")
