@@ -80,8 +80,8 @@ def createUI():
     # anders verhaelt als die anderen Widgets (isinstance(allWidgets[indexofWidget % len(allWidgets)], Tkinter.Listbox)
     run=True
     while run:
-        top.after(50, read())
-        top.after(50, iterate_gui(top))
+        top.after(0, read())
+        top.after(0, iterate_gui(top))
     top.mainloop()
 
 
@@ -132,6 +132,7 @@ def setVorneRSchwelle():
             rechtsVorne += right_data[i][j]
     global rechtsVorneSchwelle
     rechtsVorneSchwelle = rechtsVorne
+    time.sleep(3)
 
 
 def setHintenRSchwelle():
@@ -143,6 +144,7 @@ def setHintenRSchwelle():
             rechtsHinten += right_data[i][j]
     global rechtsHintenSchwelle
     rechtsHintenSchwelle = rechtsHinten
+    time.sleep(3)
 
 
 def setSeiteRSchwelle():
@@ -154,6 +156,7 @@ def setSeiteRSchwelle():
             rechtsSeite += right_data[i][j]
     global rechtsSeiteSchwelle
     rechtsSeiteSchwelle = rechtsSeite
+    time.sleep(3)
 
 
 def setVorneLSchwelle():
@@ -165,6 +168,7 @@ def setVorneLSchwelle():
             linksVorne += links_data[i][j]
     global linksVorneSchwelle
     linksVorneSchwelle = linksVorne
+    time.sleep(3)
 
 
 def setHintenLSchwelle():
@@ -176,6 +180,7 @@ def setHintenLSchwelle():
             linksHinten += left_data[i][j]
     global linksHintenSchwelle
     linksHintenSchwelle = linksHinten
+    time.sleep(3)
 
 
 def setSeiteLSchwelle():
@@ -187,6 +192,7 @@ def setSeiteLSchwelle():
             linksSeite += left_data[i][j]
     global linksSeiteSchwelle
     linksSeiteSchwelle = linksSeite
+    time.sleep(3)
 
 
 def read():
