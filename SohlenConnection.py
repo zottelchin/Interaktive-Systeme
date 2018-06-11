@@ -1,6 +1,6 @@
 import serial
 
-def getData(side):
+def getdata(side):
     if side == "L":
         port = "COM4"
     else:

@@ -1,7 +1,3 @@
 import gui
 
-
-
 gui.createUI()
-
-

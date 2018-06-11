@@ -117,18 +117,18 @@ def setOffset():
     OFFSET_RIGHT = [[0 for x in range(5)]for y in range(10)]
     OFFSET_LEFT = [[0 for x in range(5)]for y in range(10)]
 
-    raw_left_data = SohlenConnection.getData("L")
-    left_data = Interpreter.inputRawDataLeft(raw_left_data, OFFSET_LEFT)
+    raw_left_data = SohlenConnection.getdata("L")
+    left_data = Interpreter.input_raw_data_left(raw_left_data, OFFSET_LEFT)
     OFFSET_LEFT = left_data
 
-    raw_right_data = SohlenConnection.getData("R")
-    right_data = Interpreter.inputRawDataRight(raw_right_data, OFFSET_RIGHT)
+    raw_right_data = SohlenConnection.getdata("R")
+    right_data = Interpreter.input_raw_data_right(raw_right_data, OFFSET_RIGHT)
     OFFSET_RIGHT = right_data
 
 
 def setVorneRSchwelle():
-    raw_right_data = SohlenConnection.getData("R")
-    right_data = Interpreter.inputRawDataRight(raw_right_data, OFFSET_RIGHT)
+    raw_right_data = SohlenConnection.getdata("R")
+    right_data = Interpreter.input_raw_data_right(raw_right_data, OFFSET_RIGHT)
     rechts_vorn = 0
     for i in range(3):
         for j in range(5):
@@ -139,8 +139,8 @@ def setVorneRSchwelle():
 
 
 def setHintenRSchwelle():
-    raw_right_data = SohlenConnection.getData("R")
-    right_data = Interpreter.inputRawDataRight(raw_right_data, OFFSET_RIGHT)
+    raw_right_data = SohlenConnection.getdata("R")
+    right_data = Interpreter.input_raw_data_right(raw_right_data, OFFSET_RIGHT)
     rechts_hinten = 0
     for i in 7, 8, 9:
         for j in range(5):
@@ -151,8 +151,8 @@ def setHintenRSchwelle():
 
 
 def setSeiteRSchwelle():
-    raw_right_data = SohlenConnection.getData("R")
-    right_data = Interpreter.inputRawDataRight(raw_right_data, OFFSET_RIGHT)
+    raw_right_data = SohlenConnection.getdata("R")
+    right_data = Interpreter.input_raw_data_right(raw_right_data, OFFSET_RIGHT)
     rechts_seite = 0
     for i in 4, 5, 6, 7:
         for j in 3, 4:
@@ -163,8 +163,8 @@ def setSeiteRSchwelle():
 
 
 def setVorneLSchwelle():
-    raw_left_data = SohlenConnection.getData("L")
-    links_data = Interpreter.inputRawDataLeft(raw_left_data, OFFSET_LEFT)
+    raw_left_data = SohlenConnection.getdata("L")
+    links_data = Interpreter.input_raw_data_left(raw_left_data, OFFSET_LEFT)
     links_vorne = 0
     for i in range(3):
         for j in range(5):
@@ -175,8 +175,8 @@ def setVorneLSchwelle():
 
 
 def setHintenLSchwelle():
-    raw_left_data = SohlenConnection.getData("L")
-    left_data = Interpreter.inputRawDataLeft(raw_left_data, OFFSET_LEFT)
+    raw_left_data = SohlenConnection.getdata("L")
+    left_data = Interpreter.input_raw_data_left(raw_left_data, OFFSET_LEFT)
     links_hinten = 0
     for i in 7, 8, 9:
         for j in range(5):
@@ -187,8 +187,8 @@ def setHintenLSchwelle():
 
 
 def setSeiteLSchwelle():
-    raw_left_data = SohlenConnection.getData("L")
-    left_data = Interpreter.inputRawDataLeft(raw_left_data, OFFSET_LEFT)
+    raw_left_data = SohlenConnection.getdata("L")
+    left_data = Interpreter.input_raw_data_left(raw_left_data, OFFSET_LEFT)
     links_seite = 0
     for i in 4, 5, 6, 7:
         for j in 0, 1:
@@ -202,11 +202,11 @@ def read():
     global indexofWidget
     global auswahl
 
-    raw_left_data = SohlenConnection.getData("L")
-    left_data = Interpreter.inputRawDataLeft(raw_left_data, OFFSET_LEFT)
+    raw_left_data = SohlenConnection.getdata("L")
+    left_data = Interpreter.input_raw_data_left(raw_left_data, OFFSET_LEFT)
 
-    raw_right_data = SohlenConnection.getData("R")
-    right_data = Interpreter.inputRawDataRight(raw_right_data, OFFSET_RIGHT)
+    raw_right_data = SohlenConnection.getdata("R")
+    right_data = Interpreter.input_raw_data_right(raw_right_data, OFFSET_RIGHT)
 
     # Heatmap.drawHeatmap(right_data)
     Heatmap.drawHeatmap(left_data)
