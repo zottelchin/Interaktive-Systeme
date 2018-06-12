@@ -15,6 +15,10 @@ linksHintenSchwelle = 9000000
 linksSeiteSchwelle = 9000000
 indexofWidget = 1
 auswahl = False
+mark_listbox=False
+indexoflistbox = 0
+activate = False
+act_var = 0 
 
 # man kann mit indexofWidget ueber alle Widgets iterieren. Das aktuell makierte Widget wird GELB
 # hinterlegt. Beim Betätigen des Widgets (Klick) wird dieses kurzzeitig ROT hinterlegt.
@@ -53,38 +57,38 @@ def createUI():
         label="Links Seite Schwellenwert", command=setSeiteLSchwelle)
 
     test_button1 = Button(
-        top, text="Hello", activebackground="green", highlightcolor="green", command=clickbutton1)
+        top, text="Hello", activebackground="green", command=clickbutton1)
     test_button1.pack(padx=10, pady=10)
 
-    test_listbox1 = Listbox(top, highlightcolor="green")
-    test_listbox1.insert(1, "Hello")
-    test_listbox1.insert(2, "Bye")
+    test_listbox1 = Listbox(top)
+    test_listbox1.insert(0, "Hello")
+    test_listbox1.insert(1, "Bye")
     test_listbox1.pack(padx=10, pady=10)
 
     test_checkbox1 = Checkbutton(
-        top, text="Arr! This be a Checkbox", activebackground="green")
+        top, text="Arr! This be a Checkbox")
     test_checkbox2 = Checkbutton(
-        top, text="Shiver me timbers!", activebackground="green")
+        top, text="Shiver me timbers!")
     test_checkbox1.pack(padx=10, pady=10)
     test_checkbox2.pack(padx=10, pady=10)
 
     var = IntVar()
 
     radiobutton1 = Radiobutton(
-        top, text="Option 1", variable=var, value=1, activebackground="green")
+        top, text="Option 1", variable=var, value=1)
     radiobutton1.pack(anchor=W, padx=10, pady=10)
 
     radiobutton2 = Radiobutton(
-        top, text="Option 2", variable=var, value=2, activebackground="green")
+        top, text="Option 2", variable=var, value=2)
     radiobutton2.pack(anchor=W, padx=10, pady=10)
 
     radiobutton3 = Radiobutton(
-        top, text="Option 3", variable=var, value=3, activebackground="green")
+        top, text="Option 3", variable=var, value=3)
     radiobutton3.pack(anchor=W, padx=10, pady=10)
 
     run = True
     while run:
-        top.after(0, read())
+        top.after(0, read(top))
         top.after(0, iterate_gui(top))
     top.mainloop()
 
@@ -92,23 +96,127 @@ def createUI():
 def iterate_gui(top):
     global indexofWidget
     global auswahl
+    global mark_listbox
+    global indexoflistbox
     all_widgets = top.winfo_children()
 
-    # Widget mit aktuellem Index GELB färben
-    if (indexofWidget % len(all_widgets)) != 0:
-        for i in range(len(all_widgets) - 1):
-            all_widgets[i + 1].config(bg=top.cget("bg"))
-        all_widgets[indexofWidget % len(all_widgets)].config(bg="yellow")
+    if mark_listbox is False:
+        # Widget mit aktuellem Index GELB färben
+        if (indexofWidget % len(all_widgets)) != 0:
+            for i in range(len(all_widgets) - 1):
+                all_widgets[i + 1].config(bg=top.cget("bg"))
+            for i in range(all_widgets[2].size()):
+                all_widgets[2].itemconfig(i, bg=top.cget("bg"))
+            all_widgets[indexofWidget % len(all_widgets)].config(bg="yellow")
+            if (indexofWidget % len(all_widgets)) == 2:
+                for i in range(all_widgets[2].size()):
+                    all_widgets[2].itemconfig(i, bg="yellow")
 
-    # Maus-KLICK auf aktuelles Widget simulieren
-    if auswahl is True:
-        all_widgets[indexofWidget % len(all_widgets)].config(bg="red")
-        x_koor = all_widgets[indexofWidget % len(all_widgets)].winfo_rootx()
-        y_koor = all_widgets[indexofWidget % len(all_widgets)].winfo_rooty()
-        pyautogui.mouseDown(x_koor + 10, y_koor + 10)
-        time.sleep(0.5)
-        pyautogui.mouseUp(x_koor + 10, y_koor + 10)
+        # Maus-KLICK auf aktuelles Widget simulieren
+        if auswahl is True and (indexofWidget % len(all_widgets)) != 2:
+            all_widgets[indexofWidget % len(all_widgets)].config(bg="red")
+            x_koor = all_widgets[indexofWidget % len(all_widgets)].winfo_rootx()
+            y_koor = all_widgets[indexofWidget % len(all_widgets)].winfo_rooty()
+            pyautogui.mouseDown(x_koor + 10, y_koor + 10)
+            time.sleep(0.5)
+            pyautogui.mouseUp(x_koor + 10, y_koor + 10)
+            #time.sleep(0.5)
+            pyautogui.moveTo(top.winfo_rootx(),top.winfo_rooty())
+    else:
+        if (indexofWidget % len(all_widgets)) != 0:
+            for i in range(len(all_widgets) - 1):
+                all_widgets[i + 1].config(bg=top.cget("bg"))
+        for i in range(all_widgets[indexofWidget % len(all_widgets)].size()):
+            all_widgets[indexofWidget % len(all_widgets)].itemconfig(i, bg=top.cget("bg"))
+        all_widgets[indexofWidget % len(all_widgets)].itemconfig((indexoflistbox % 2), bg = "yellow")
 
+        # Maus-KLICK auf aktuelles Widget simulieren
+        if auswahl is True:
+            all_widgets[indexofWidget % len(all_widgets)].itemconfig((indexoflistbox % 2), bg = "red")
+            koor = all_widgets[indexofWidget % len(all_widgets)].bbox(indexoflistbox % 2)
+            x_koor= koor[0] + all_widgets[indexofWidget % len(all_widgets)].winfo_rootx()
+            y_koor = koor[1] + all_widgets[indexofWidget % len(all_widgets)].winfo_rooty()
+            pyautogui.mouseDown(x_koor + 10, y_koor + 10)
+            time.sleep(0.5)
+            pyautogui.mouseUp(x_koor + 10, y_koor + 10)
+        
+
+
+
+def read(top):
+    global indexofWidget
+    global auswahl
+    global mark_listbox
+    global indexoflistbox
+    global activate
+    global act_var
+    all_widgets = top.winfo_children()
+    
+    raw_left_data = SohlenConnection.getdata("L")
+    left_data = Interpreter.input_raw_data_left(raw_left_data, OFFSET_LEFT)
+
+    raw_right_data = SohlenConnection.getdata("R")
+    right_data = Interpreter.input_raw_data_right(raw_right_data, OFFSET_RIGHT)
+
+    # Heatmap.drawHeatmap(right_data)
+    Heatmap.drawHeatmap(left_data)
+
+    if activate is True:
+        if VorneRechts(right_data) and not HintenRechts(right_data) and not SeiteRechts(right_data) and not VorneLinks(left_data):
+            print("vorne rechts")
+
+            if mark_listbox is True:
+                indexoflistbox = indexoflistbox - 1
+            else:
+                indexofWidget = indexofWidget - 1
+                if (indexofWidget % len(all_widgets)) == 0:
+                    indexofWidget = indexofWidget - 1
+
+        if HintenRechts(right_data) and not VorneRechts(right_data) and not SeiteRechts(right_data):
+            print("hinten rechts")
+            if mark_listbox is True:
+                indexoflistbox = indexoflistbox + 1
+            else:
+                indexofWidget = indexofWidget + 1
+                if (indexofWidget % len(all_widgets)) == 0:
+                    indexofWidget = indexofWidget + 1
+
+        if not HintenRechts(right_data) and not VorneRechts(right_data) and SeiteRechts(right_data):
+            print("seite rechts")
+            auswahl = True
+        else:
+            auswahl = False
+        
+        if VorneLinks(left_data) and not HintenLinks(left_data) and not SeiteLinks(left_data) and not VorneRechts(right_data):
+            print("vorne links")
+            if isinstance(all_widgets[indexofWidget % len(all_widgets)], Listbox) is True:
+                mark_listbox = True
+
+        if HintenLinks(left_data) and not VorneLinks(left_data) and not SeiteLinks(left_data):
+            print("hinten left")
+            if isinstance(all_widgets[indexofWidget % len(all_widgets)], Listbox) is True:
+                mark_listbox = False
+
+        if not HintenLinks(left_data) and not VorneLinks(left_data) and SeiteLinks(left_data):
+            print("seite links")
+
+    if VorneLinks(left_data) and VorneRechts(right_data) and not HintenLinks(left_data) and not HintenRechts(right_data):
+        if activate is False:
+            if act_var < 3:
+                act_var = act_var + 1
+                print(act_var)
+            else:
+                activate = True
+                print("ACTIVATE")
+                time.sleep(3)
+        else: 
+            if act_var > 0:
+                act_var = act_var - 1
+                print(act_var)
+            else:
+                activate = False
+                print("DEACTIVATE")
+                time.sleep(3)
 
 def setOffset():
     global OFFSET_RIGHT
@@ -196,43 +304,6 @@ def setSeiteLSchwelle():
     global linksSeiteSchwelle
     linksSeiteSchwelle = links_seite
     time.sleep(3)
-
-
-def read():
-    global indexofWidget
-    global auswahl
-
-    raw_left_data = SohlenConnection.getdata("L")
-    left_data = Interpreter.input_raw_data_left(raw_left_data, OFFSET_LEFT)
-
-    raw_right_data = SohlenConnection.getdata("R")
-    right_data = Interpreter.input_raw_data_right(raw_right_data, OFFSET_RIGHT)
-
-    # Heatmap.drawHeatmap(right_data)
-    Heatmap.drawHeatmap(left_data)
-
-    if VorneRechts(right_data) and not HintenRechts(right_data) and not SeiteRechts(right_data):
-        print("vorne rechts")
-        indexofWidget = indexofWidget - 1
-
-    if HintenRechts(right_data) and not VorneRechts(right_data) and not SeiteRechts(right_data):
-        print("hinten rechts")
-        indexofWidget = indexofWidget + 1
-
-    if not HintenRechts(right_data) and not VorneRechts(right_data) and SeiteRechts(right_data):
-        print("seite rechts")
-
-    if VorneLinks(left_data) and not HintenLinks(left_data) and not SeiteLinks(left_data):
-        print("vorne links")
-        auswahl = True
-    else:
-        auswahl = False
-
-    if HintenLinks(left_data) and not VorneLinks(left_data) and not SeiteLinks(left_data):
-        print("hinten left")
-
-    if not HintenLinks(left_data) and not VorneLinks(left_data) and SeiteLinks(left_data):
-        print("seite links")
 
 
 def VorneRechts(Data):
