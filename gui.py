@@ -4,6 +4,7 @@ import Interpreter
 import Heatmap
 import pyautogui
 import time
+import winsound
 
 OFFSET_RIGHT = [[0 for x in range(5)]for y in range(10)]
 OFFSET_LEFT = [[0 for x in range(5)]for y in range(10)]
@@ -205,9 +206,11 @@ def read(top):
             if act_var < 3:
                 act_var = act_var + 1
                 print(act_var)
+                winsound.Beep(800,200)
             else:
                 activate = True
                 print("ACTIVATE")
+                winsound.Beep(1000,500)
                 time.sleep(3)
         else: 
             if act_var > 0:
